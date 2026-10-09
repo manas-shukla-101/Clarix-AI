@@ -85,6 +85,8 @@ Because Clarix relies on client-side processing, it deploys seamlessly as a stat
    ```env
    VITE_SUPABASE_URL=your_supabase_url
    VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+   VITE_GOOGLE_CLIENT_ID=your_google_client_id
+   VITE_GROQ_API_KEY=your_groq_api_key
    ```
 4. **Run the Development Server:**
    ```bash
