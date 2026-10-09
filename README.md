@@ -13,7 +13,6 @@
   <p><i>A 100% browser-based, AI-assisted data visualization and dashboarding workspace.</i></p>
 </div>
 
-> Here is the live demo of Clarix-AI: https://clarix-ai-nine.vercel.app/
 ---
 
 ## 📑 Table of Contents
@@ -48,6 +47,33 @@ Clarix is a lightning-fast, zero-friction visualization workspace that runs **en
 
 ---
 
+## 📸 Application Gallery
+
+<div align="center">
+  <img src="assets/screenshots/home.png" alt="Home Page" width="800" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+  <br/><i>The stunning glassmorphic landing page with custom API key support.</i><br/><br/>
+
+  <img src="assets/screenshots/upload.png" alt="Upload Data" width="800" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+  <br/><i>Secure, 100% browser-based file ingestion via drag-and-drop or Google Drive.</i><br/><br/>
+
+  <img src="assets/screenshots/inspect.png" alt="Inspect Data" width="800" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+  <br/><i>Instant data parsing and SQL-based previewing.</i><br/><br/>
+
+  <img src="assets/screenshots/build_dashboard.png" alt="Build Dashboard" width="800" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+  <br/><i>AI-recommended charts and an advanced custom chart builder (with color pickers).</i><br/><br/>
+
+  <img src="assets/screenshots/dashboard.png" alt="Dashboard" width="800" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+  <br/><i>The dynamic, collision-aware drag-and-drop dashboard canvas.</i><br/><br/>
+
+  <img src="assets/screenshots/shared_dashboard.png" alt="Shared Dashboard" width="800" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+  <br/><i>The beautifully rendered, shareable public dashboard view.</i><br/><br/>
+
+  <img src="assets/screenshots/shared_charts.png" alt="Shared Charts" width="800" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+  <br/><i>Interactive focus mode for individual chart analysis.</i><br/><br/>
+</div>
+
+---
+
 ## 🎯 Strategic Logic Flow
 
 ### 1. Zero-Server Ingestion
@@ -74,7 +100,7 @@ Because Clarix relies on client-side processing, it deploys seamlessly as a stat
 ### Option 2: Local Development
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/manas-shukla-101/Clarix-AI.git
+   git clone https://github.com/manas-shukla-101/Clarix.git
    cd Clarix
    ```
 2. **Install Dependencies:**
@@ -86,8 +112,6 @@ Because Clarix relies on client-side processing, it deploys seamlessly as a stat
    ```env
    VITE_SUPABASE_URL=your_supabase_url
    VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-   VITE_GOOGLE_CLIENT_ID=your_google_client_id
-   VITE_GROQ_API_KEY=your_groq_api_key
    ```
 4. **Run the Development Server:**
    ```bash
