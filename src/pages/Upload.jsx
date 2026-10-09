@@ -107,7 +107,7 @@ export default function Upload() {
     if (fileRejections.length > 0) {
       const rejection = fileRejections[0]
       if (rejection.errors[0].code === 'file-too-large') {
-        setError('File is too large. Maximum size is 10MB.')
+        setError('File is too large. Maximum size is 50MB.')
       } else if (rejection.errors[0].code === 'file-invalid-type') {
         setError('Unsupported file format. Please upload CSV, JSON, or Excel (.xlsx).')
       } else {
@@ -122,7 +122,7 @@ export default function Upload() {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    maxSize: 10 * 1024 * 1024,
+    maxSize: 50 * 1024 * 1024,
     accept: {
       'text/csv': ['.csv'],
       'application/json': ['.json'],
@@ -248,7 +248,7 @@ export default function Upload() {
             CSV, JSON, XLSX
           </span>
           <span className="w-1 h-1 bg-zinc-300 dark:bg-zinc-600 rounded-full"></span>
-          <span>Max 10MB</span>
+          <span>Max 50MB</span>
         </div>
       </div>
       
