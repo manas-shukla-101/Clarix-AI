@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
+import { Analytics } from '@vercel/analytics/react'
 import Home from './pages/Home'
 import Upload from './pages/Upload'
 import Inspect from './pages/Inspect'
@@ -19,6 +20,7 @@ function App() {
         <Route path="/d/:slug" element={<SharedView />} />
       </Routes>
       <Toaster position="bottom-right" />
+      <Analytics />
     </div>
   )
 }
