@@ -28,7 +28,7 @@ export default function ChartRenderer({ chartConfig }) {
   const option = useMemo(() => {
     if (chartConfig.type === 'Metric') return {}
 
-    const { type, xAxis, yAxis } = chartConfig
+    const { type, xAxis, yAxis, colorBy, baseColor = '#6366f1' } = chartConfig
 
     const base = {
       backgroundColor: 'transparent',
@@ -50,6 +50,48 @@ export default function ChartRenderer({ chartConfig }) {
 
     // ── Bar ──────────────────────────────────────────────────────────────
     if (type === 'Bar') {
+      if (colorBy) {
+        const seriesMap = {}
+        const uniqueX = new Set()
+        rawData.forEach(row => {
+          const xKey = String(row[xAxis] ?? 'Unknown')
+          const cKey = String(row[colorBy] ?? 'Unknown')
+          const val = Number(row[yAxis] ?? 0)
+          uniqueX.add(xKey)
+          if (!seriesMap[cKey]) seriesMap[cKey] = {}
+          seriesMap[cKey][xKey] = (seriesMap[cKey][xKey] || 0) + (isNaN(val) ? 0 : val)
+        })
+        const aggX = Array.from(uniqueX).sort()
+        if (aggX.length > 30) aggX.length = 30 // truncate x axis
+        
+        const cKeys = Object.keys(seriesMap).sort()
+        const series = cKeys.map((k, i) => ({
+          name: k,
+          type: 'bar',
+          stack: 'total',
+          data: aggX.map(x => seriesMap[k][x] || 0),
+          itemStyle: { color: PALETTE[i % PALETTE.length] }
+        }))
+
+        return {
+          ...base,
+          legend: { show: true, type: 'scroll', bottom: 0, textStyle: { color: textColor, fontSize: 11 } },
+          xAxis: {
+            type: 'category', data: aggX,
+            axisLine: { lineStyle: { color: lineColor } },
+            axisLabel: { color: textColor, fontSize: 11, rotate: aggX.length > 6 ? 30 : 0 },
+            axisTick: { show: false }
+          },
+          yAxis: {
+            type: 'value',
+            splitLine: { lineStyle: { color: lineColor, type: 'dashed' } },
+            axisLabel: { color: textColor, fontSize: 11, formatter: v => formatNumber(v) }
+          },
+          series
+        }
+      }
+
+      // Single series Bar
       const grouped = {}
       rawData.forEach(row => {
         const key = String(row[xAxis] ?? 'Unknown')
@@ -81,15 +123,8 @@ export default function ChartRenderer({ chartConfig }) {
           data: aggY, type: 'bar',
           itemStyle: {
             borderRadius: [6, 6, 0, 0],
-            color: {
-              type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
-              colorStops: [
-                { offset: 0, color: '#818cf8' },
-                { offset: 1, color: '#6366f1' }
-              ]
-            }
+            color: baseColor
           },
-          emphasis: { itemStyle: { color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: '#a5b4fc' }, { offset: 1, color: '#818cf8' }] } } },
           label: {
             show: aggY.length <= 15,
             position: 'top',
@@ -105,6 +140,53 @@ export default function ChartRenderer({ chartConfig }) {
     // ── Line & Area ─────────────────────────────────────────────────────────────
     if (type === 'Line' || type === 'Area') {
       const isArea = type === 'Area'
+      
+      if (colorBy) {
+        const seriesMap = {}
+        const uniqueX = new Set()
+        rawData.forEach(row => {
+          const xKey = String(row[xAxis] ?? 'Unknown')
+          const cKey = String(row[colorBy] ?? 'Unknown')
+          const val = Number(row[yAxis] ?? 0)
+          uniqueX.add(xKey)
+          if (!seriesMap[cKey]) seriesMap[cKey] = {}
+          seriesMap[cKey][xKey] = (seriesMap[cKey][xKey] || 0) + (isNaN(val) ? 0 : val)
+        })
+        const aggX = Array.from(uniqueX).sort((a,b) => (Date.parse(a) || a.localeCompare(b)) - (Date.parse(b) || b.localeCompare(a)))
+        const cKeys = Object.keys(seriesMap).sort()
+        
+        const series = cKeys.map((k, i) => ({
+          name: k,
+          type: 'line',
+          smooth: true,
+          symbol: 'circle',
+          symbolSize: aggX.length > 30 ? 2 : 6,
+          lineStyle: { width: 3, color: PALETTE[i % PALETTE.length] },
+          itemStyle: { color: PALETTE[i % PALETTE.length] },
+          areaStyle: isArea ? { color: PALETTE[i % PALETTE.length], opacity: 0.3 } : undefined,
+          data: aggX.map(x => seriesMap[k][x] || 0)
+        }))
+
+        return {
+          ...base,
+          legend: { show: true, type: 'scroll', bottom: 0, textStyle: { color: textColor, fontSize: 11 } },
+          xAxis: {
+            type: 'category', data: aggX,
+            axisLine: { lineStyle: { color: lineColor } },
+            axisLabel: { color: textColor, fontSize: 11, rotate: aggX.length > 8 ? 30 : 0 },
+            axisTick: { show: false },
+            boundaryGap: false
+          },
+          yAxis: {
+            type: 'value',
+            splitLine: { lineStyle: { color: lineColor, type: 'dashed' } },
+            axisLabel: { color: textColor, fontSize: 11, formatter: v => formatNumber(v) }
+          },
+          series
+        }
+      }
+
+      // Single series Line
       const dateMap = {}
       rawData.forEach(row => {
         const key = String(row[xAxis] ?? 'Unknown')
@@ -138,17 +220,9 @@ export default function ChartRenderer({ chartConfig }) {
         series: [{
           data: aggY, type: 'line', smooth: true,
           symbol: 'circle', symbolSize: aggY.length > 30 ? 2 : 6,
-          lineStyle: { width: 3, color: '#818cf8' },
-          itemStyle: { color: '#6366f1', borderColor: '#fff', borderWidth: 2 },
-          areaStyle: isArea ? {
-            color: {
-              type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
-              colorStops: [
-                { offset: 0, color: 'rgba(99,102,241,0.6)' },
-                { offset: 1, color: 'rgba(99,102,241,0.05)' }
-              ]
-            }
-          } : undefined,
+          lineStyle: { width: 3, color: baseColor },
+          itemStyle: { color: baseColor, borderColor: '#fff', borderWidth: 2 },
+          areaStyle: isArea ? { color: baseColor, opacity: 0.2 } : undefined,
           label: {
             show: aggY.length <= 12,
             position: 'top',
@@ -189,13 +263,7 @@ export default function ChartRenderer({ chartConfig }) {
         series: [{
           data: scatterData, type: 'scatter', symbolSize: 10,
           itemStyle: {
-            color: {
-              type: 'radial', x: 0.5, y: 0.5, r: 0.5,
-              colorStops: [
-                { offset: 0, color: '#a5b4fc' },
-                { offset: 1, color: '#6366f1' }
-              ]
-            },
+            color: baseColor,
             opacity: 0.85
           },
           emphasis: { itemStyle: { opacity: 1, symbolSize: 14 } }

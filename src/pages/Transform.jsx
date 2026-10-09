@@ -34,7 +34,9 @@ export default function Transform() {
     title: 'Custom Chart',
     type: 'Bar',
     xAxis: '',
-    yAxis: ''
+    yAxis: '',
+    colorBy: '',
+    baseColor: '#6366f1'
   })
 
   const [recommendations, setRecommendations] = useState([])
@@ -63,6 +65,8 @@ export default function Transform() {
       title: rec.title,
       xAxis: rec.xAxis || null,
       yAxis: rec.yAxis || null,
+      colorBy: rec.colorBy || null,
+      baseColor: rec.baseColor || '#6366f1',
       w: 6, // default width
       h: 4, // default height
     }
@@ -77,7 +81,9 @@ export default function Transform() {
       title: 'Custom Chart',
       type: 'Bar',
       xAxis: '',
-      yAxis: ''
+      yAxis: '',
+      colorBy: '',
+      baseColor: '#6366f1'
     })
   }
 
@@ -239,6 +245,36 @@ export default function Transform() {
                     </option>
                   ))}
                 </select>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Color By (Optional Stack)</label>
+                <select 
+                  value={customChart.colorBy}
+                  onChange={e => setCustomChart({...customChart, colorBy: e.target.value})}
+                  disabled={customChart.type !== 'Bar' && customChart.type !== 'Line' && customChart.type !== 'Area'}
+                  className="w-full px-4 py-2.5 bg-zinc-50/50 dark:bg-zinc-950/50 border border-zinc-200 dark:border-zinc-800 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all text-sm font-medium disabled:opacity-40"
+                >
+                  <option value="">None (Single Color)</option>
+                  {columns.map(c => (
+                    <option key={c} value={c}>
+                      {c} ({columnTypes[c]})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Base Color</label>
+                <div className="flex items-center gap-3">
+                  <input 
+                    type="color"
+                    value={customChart.baseColor}
+                    onChange={e => setCustomChart({...customChart, baseColor: e.target.value})}
+                    className="w-10 h-10 rounded cursor-pointer border-0 p-0 bg-transparent"
+                  />
+                  <span className="text-sm font-mono text-zinc-500 uppercase">{customChart.baseColor}</span>
+                </div>
               </div>
             </div>
 
