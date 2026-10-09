@@ -13,6 +13,7 @@
   <p><i>A 100% browser-based, AI-assisted data visualization and dashboarding workspace.</i></p>
 </div>
 
+> Here is the live demo of Clarix-AI: https://clarix-ai-nine.vercel.app
 ---
 
 ## 📑 Table of Contents
