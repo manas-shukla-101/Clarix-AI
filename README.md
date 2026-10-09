@@ -73,7 +73,7 @@ Because Clarix relies on client-side processing, it deploys seamlessly as a stat
 ### Option 2: Local Development
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/manas-shukla-101/Clarix.git
+   git clone https://github.com/manas-shukla-101/Clarix-AI.git
    cd Clarix
    ```
 2. **Install Dependencies:**
